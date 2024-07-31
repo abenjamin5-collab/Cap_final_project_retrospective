@@ -34,14 +34,31 @@ export default {
     register() {
       axios.post('/api/auth/register/', {
         username: this.username,
+        email: this.email,
         password: this.password,
-        email: this.email
+        role: this.role
       })
       .then(response => {
-        // Handle success
+        // Optionally log in the user after registration
+        this.loginAfterRegister();
       })
       .catch(error => {
-        // Handle error
+        console.error('Error registering:', error);
+      });
+    },
+    loginAfterRegister() {
+      axios.post('/api/auth/login/', {
+        username: this.username,
+        password: this.password
+      })
+      .then(response => {
+        localStorage.setItem('access_token', response.data.access);
+        localStorage.setItem('refresh_token', response.data.refresh);
+        // Redirect to the dashboard or another page
+        this.$router.push('/dashboard');
+      })
+      .catch(error => {
+        console.error('Error logging in:', error);
       });
     }
   }
@@ -49,5 +66,42 @@ export default {
 </script>
 
 <style scoped>
-/* Add your styles here */
+.register {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input, select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 2px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  display: inline-block;
+  padding: 10px 15px;
+  background: #009900;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #009900;
+}
 </style>

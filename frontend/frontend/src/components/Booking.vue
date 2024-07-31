@@ -1,46 +1,51 @@
 <template>
-  <div class="booking-container">
-    <h1>Book a Tennis Lesson</h1>
-    <form @submit.prevent="submitBooking">
-      <div class="form-group">
-        <label for="coach">Select Coach:</label>
-        <select v-model="booking.coach" id="coach" required>
-          <option v-for="coach in coaches" :key="coach.id" :value="coach.id">
-            {{ coach.name }}
-          </option>
-        </select>
-      </div>
+  <div>
+    <navbar></navbar>
+    <div class="booking-container">
+      <h1>Book a Tennis Lesson</h1>
+      <form @submit.prevent="submitBooking">
+        <div class="form-group">
+          <label for="coach">Select Coach:</label>
+          <select v-model="booking.coach" id="coach" required>
+            <option v-for="coach in coaches" :key="coach.id" :value="coach.id">
+              {{ coach.name }}
+            </option>
+          </select>
+        </div>
 
-      <div class="form-group">
-        <label for="date">Select Date:</label>
-        <input type="date" v-model="booking.date" id="date" required />
-      </div>
+        <div class="form-group">
+          <label for="date">Select Date:</label>
+          <input type="date" v-model="booking.date" id="date" required />
+        </div>
 
-      <div class="form-group">
-        <label for="time">Select Time:</label>
-        <input type="time" v-model="booking.time" id="time" required />
-      </div>
+        <div class="form-group">
+          <label for="time">Select Time:</label>
+          <input type="time" v-model="booking.time" id="time" required />
+        </div>
 
-      <button type="submit" class="btn btn-primary">Book Lesson</button>
-    </form>
+        <button type="submit" class="btn btn-primary">Book Lesson</button>
+      </form>
 
-    <div v-if="message" class="message">{{ message }}</div>
+      <div v-if="message" class="message">{{ message }}</div>
+    </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
+import Navbar from "./Navbar.vue";
 
 export default {
+  components: { Navbar },
   data() {
     return {
       booking: {
-        coach: '',
-        date: '',
-        time: '',
+        coach: "",
+        date: "",
+        time: "",
       },
       coaches: [],
-      message: '',
+      message: "",
     };
   },
   created() {
@@ -49,24 +54,24 @@ export default {
   methods: {
     fetchCoaches() {
       axios
-        .get('/api/coaches')
+        .get("/api/coaches")
         .then((response) => {
           this.coaches = response.data;
         })
         .catch((error) => {
-          console.error('There was an error fetching the coaches:', error);
+          console.error("There was an error fetching the coaches:", error);
         });
     },
     submitBooking() {
       axios
-        .post('/api/bookings', this.booking)
+        .post("/api/bookings", this.booking)
         .then((response) => {
-          this.message = 'Booking successful!';
-          this.booking = { coach: '', date: '', time: '' }; // Reset form
+          this.message = "Booking successful!";
+          this.booking = { coach: "", date: "", time: "" }; // Reset form
         })
         .catch((error) => {
-          console.error('There was an error submitting the booking:', error);
-          this.message = 'Failed to book lesson. Please try again.';
+          console.error("There was an error submitting the booking:", error);
+          this.message = "Failed to book lesson. Please try again.";
         });
     },
   },
@@ -77,6 +82,7 @@ export default {
 .booking-container {
   max-width: 500px;
   margin: 0 auto;
+  margin-top:20px !important;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
