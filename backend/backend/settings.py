@@ -111,7 +111,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'tennis_booking',
         'USER': 'root',
-        'PASSWORD': 'Maryville',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '3306',
     }
