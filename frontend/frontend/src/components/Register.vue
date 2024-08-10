@@ -3,7 +3,8 @@
     <navbar></navbar>
     <h1>Register</h1>
     <form @submit.prevent="register">
-      <input type="text" v-model="username" placeholder="Username" required>
+      <input type="text" v-model="firstName" placeholder="First name" required>
+      <input type="text" v-model="lastName" placeholder="Last name" required>
       <input type="password" v-model="password" placeholder="Password" required>
       <input type="email" v-model="email" placeholder="Email" required>
         <select v-model="selectedRole" id="role" required>
@@ -19,12 +20,14 @@
 <script>
 import axios from 'axios';
 import Navbar from './Navbar.vue';
+import { base_url } from "../../config/config";
 
 export default {
   components: { Navbar },
   data() {
     return {
-      username: '',
+      firstName: '',
+      lastName: '',
       password: '',
       email: '',
       selectedRole:'',
@@ -32,35 +35,30 @@ export default {
   },
   methods: {
     register() {
-      axios.post('/api/auth/register/', {
-        username: this.username,
+      axios.post(`${base_url}/api/register/`, {
+        firstName: this.firstName,
+        lastName: this.lastName,
         email: this.email,
         password: this.password,
-        role: this.role
+        role: this.selectedRole
       })
-      .then(response => {
-        // Optionally log in the user after registration
-        this.loginAfterRegister();
-      })
-      .catch(error => {
-        console.error('Error registering:', error);
-      });
+      .then((response) => {
+          let data = response?.data?.data;
+          localStorage.setItem("access_token", data.token);
+          localStorage.setItem('user', JSON.stringify(data.user));
+          this.$toast.success("Register Successful", {
+            position: 'bottom',
+          });
+          // Redirect to the dashboard or another page
+          this.$router.push("/booking");
+        })
+        .catch((error) => {
+          this.$toast.error("Register Failed!", {
+            position: 'bottom',
+          });
+        });
     },
-    loginAfterRegister() {
-      axios.post('/api/auth/login/', {
-        username: this.username,
-        password: this.password
-      })
-      .then(response => {
-        localStorage.setItem('access_token', response.data.access);
-        localStorage.setItem('refresh_token', response.data.refresh);
-        // Redirect to the dashboard or another page
-        this.$router.push('/dashboard');
-      })
-      .catch(error => {
-        console.error('Error logging in:', error);
-      });
-    }
+   
   }
 };
 </script>

@@ -6,10 +6,12 @@
         <ul>
           <li><RouterLink to="/">Home</RouterLink></li>
           <li v-if="!isLoggedIn"><RouterLink to="/login">Login</RouterLink></li>
-          <li v-if="!isLoggedIn">
-            <RouterLink to="/register">Register</RouterLink>
-          </li>
-          <li v-else><RouterLink @click="logout" to="#">Logout</RouterLink></li>
+          <li v-if="!isLoggedIn"><RouterLink to="/register">Register</RouterLink></li>
+          <li v-if="isStudent"><RouterLink to="/student/dashboard">Dashboard</RouterLink></li>
+          <li v-if="isStudent"><RouterLink to="/booking">Booking</RouterLink></li>
+          <li v-if="isCoach"><RouterLink to="/coach/dashboard">Dashboard</RouterLink></li>
+          <li v-if="isCoach"><RouterLink to="/lesson-management">Lesson Management</RouterLink></li>
+          <li v-if="isLoggedIn"><RouterLink @click="logout" to="#">Logout</RouterLink></li>
         </ul>
       </nav>
       <div class="hamburger-icon">
@@ -30,21 +32,31 @@
 
 <script>
 export default {
-  data() {
-    return {
-      isLoggedIn: false,
-    };
-  },
-  mounted() {
-    this.isLoggedIn = localStorage.getItem("access_token");
+  computed: {
+    isLoggedIn() {
+      const user = JSON.parse(localStorage.getItem('user'));
+      return !!user;
+    },
+    isStudent() {
+      const user = JSON.parse(localStorage.getItem('user'));
+      return user && user.role === 'student';
+    },
+    isCoach() {
+      const user = JSON.parse(localStorage.getItem('user'));
+      return user && user.role === 'coach';
+    },
   },
   methods: {
     logout() {
-        localStorage.clear();
-        this.$router.push("/login");
+      localStorage.removeItem('user');
+      localStorage.removeItem('access_token');
+      localStorage.clear();
+      this.$router.push("/login");
+      
     },
   },
 };
 </script>
 
-<style></style>
+<style scoped>
+</style>

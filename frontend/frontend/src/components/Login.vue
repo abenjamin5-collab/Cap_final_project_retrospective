@@ -3,7 +3,7 @@
     <navbar></navbar>
     <h1>Login</h1>
     <form @submit.prevent="login">
-      <input type="text" v-model="username" placeholder="Username" required />
+      <input type="text" v-model="email" placeholder="Email" required />
       <input
         type="password"
         v-model="password"
@@ -23,29 +23,34 @@ export default {
   components: { Navbar },
   data() {
     return {
-      username: "",
+      email: "",
       password: "",
     };
   },
   methods: {
     login() {
       axios
-        .post(`${base_url}/api/auth/login/`, {
-          username: this.username,
+        .post(`${base_url}/api/login/`, {
+          email: this.email,
           password: this.password,
         })
         .then((response) => {
-          localStorage.setItem("access_token", response.data.access);
-          localStorage.setItem("refresh_token", response.data.refresh);
+          let data = response?.data?.data;
+          localStorage.setItem("access_token", data.token);
+          localStorage.setItem("user", JSON.stringify(data.user));
           this.$toast.success("Login Successful", {
-            position: 'bottom',
+            position: "bottom",
           });
           // Redirect to the dashboard or another page
-          this.$router.push("/booking");
+          if (data.user.role == "coach") {
+            this.$router.push("/lesson-management");
+          } else {
+            this.$router.push("/booking");
+          }
         })
         .catch((error) => {
           this.$toast.error("Login Failed! Check Credentials", {
-            position: 'bottom',
+            position: "bottom",
           });
         });
     },
