@@ -8,7 +8,7 @@
           <label for="coach">Select Coach:</label>
           <select v-model="booking.coach" id="coach" required>
             <option v-for="coach in coaches" :key="coach.id" :value="coach.id">
-              {{ coach.name }}
+              {{ coach.first_name }} {{ coach.last_name }}
             </option>
           </select>
         </div>
@@ -34,7 +34,7 @@
 <script>
 import axios from "axios";
 import Navbar from "./Navbar.vue";
-
+import { base_url } from "../../config/config";
 export default {
   components: { Navbar },
   data() {
@@ -48,19 +48,26 @@ export default {
       message: "",
     };
   },
-  created() {
+  mounted() {
     this.fetchCoaches();
+    const coachId = this.$route.query.coachId;
+    if (coachId) {
+      this.booking.coach = coachId;
+    }
   },
   methods: {
-    fetchCoaches() {
-      axios
-        .get("/api/coaches")
-        .then((response) => {
-          this.coaches = response.data;
-        })
-        .catch((error) => {
-          console.error("There was an error fetching the coaches:", error);
+    async fetchCoaches() {
+      try {
+        const response = await axios.get(`${base_url}/api/coaches`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
         });
+        this.coaches = response.data.coaches;
+        console.log(this.coaches);
+      } catch (error) {
+        console.error("Error fetching coaches:", error);
+      }
     },
     submitBooking() {
       axios

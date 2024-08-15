@@ -7,7 +7,7 @@
           <li><RouterLink to="/">Home</RouterLink></li>
           <li v-if="!isLoggedIn"><RouterLink to="/login">Login</RouterLink></li>
           <li v-if="!isLoggedIn"><RouterLink to="/register">Register</RouterLink></li>
-          <li v-if="isStudent"><RouterLink to="/student/dashboard">Dashboard</RouterLink></li>
+          <li v-if="isStudent"><RouterLink to="/view/coaches">Dashboard</RouterLink></li>
           <li v-if="isStudent"><RouterLink to="/booking">Booking</RouterLink></li>
           <li v-if="isCoach"><RouterLink to="/coach/dashboard">Dashboard</RouterLink></li>
           <li v-if="isCoach"><RouterLink to="/lesson-management">Lesson Management</RouterLink></li>

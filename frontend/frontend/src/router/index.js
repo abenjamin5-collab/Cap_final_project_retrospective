@@ -6,6 +6,8 @@ import UserManagement from "../components/UserManagement.vue";
 import LessonManagement from "../components/LessonManagement.vue";
 import Home from "../pages/Home.vue";
 import Register from "../components/Register.vue";
+import Coaches from  "../pages/Coaches.vue";
+
 
 const routes = [
   { path: "/login", component: Login },
@@ -13,6 +15,7 @@ const routes = [
   { path: "/booking", component: Booking, meta: { requiresAuth: true, role: 'student' } },
   { path: "/user-management", component: UserManagement, meta: { requiresAuth: true, role: 'admin' } },
   { path: "/lesson-management", component: LessonManagement, meta: { requiresAuth: true, role: 'coach' } },
+  { path: "/view/coaches", component: Coaches, meta: { requiresAuth: true, role: 'student' } },
   { path: "/", component: Home },
   { path: "/register", component: Register },
 ];

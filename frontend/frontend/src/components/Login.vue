@@ -45,7 +45,7 @@ export default {
           if (data.user.role == "coach") {
             this.$router.push("/lesson-management");
           } else {
-            this.$router.push("/booking");
+            this.$router.push("/view/coaches");
           }
         })
         .catch((error) => {

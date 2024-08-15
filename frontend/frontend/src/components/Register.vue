@@ -50,7 +50,7 @@ export default {
             position: 'bottom',
           });
           // Redirect to the dashboard or another page
-          this.$router.push("/booking");
+          this.$router.push("/view/coaches");
         })
         .catch((error) => {
           this.$toast.error("Register Failed!", {
